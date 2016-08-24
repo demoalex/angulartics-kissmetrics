@@ -4,22 +4,22 @@
 	<meta charset="utf8">
 	<title>Kissmetrics plugin sample | Angulartics</title>
 	<link rel="stylesheet" href="//bootswatch.com/cosmo/bootstrap.min.css">
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
-	<script src="/node_modules/angulartics/dist/angulartics.min.js"></script>
-	<script src="/dist/angulartics-kissmetrics.min.js"></script>
-	<script>
-	var _kmq = _kmq || [];
-	var _kmk = _kmk || 'a41242214c6f8c693b4c8a59fa8f981e13549deb';
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.20/angular.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.20/angular-route.js"></script>
+	<script src="../node_modules/angulartics/dist/angulartics.min.js"></script>
+	<script src="../dist/angulartics-kissmetrics.min.js"></script>
+	<script type="text/javascript">var _kmq = _kmq || [];
+	var _kmk = _kmk || 'c1aea643a10914d7438906c10bb117972ef61e84';
 	function _kms(u){
-	setTimeout(function(){
-		var d = document, f = d.getElementsByTagName('script')[0],
-		s = d.createElement('script');
-		s.type = 'text/javascript'; s.async = true; s.src = u;
-		f.parentNode.insertBefore(s, f);
-	}, 1);
+		setTimeout(function(){
+			var d = document, f = d.getElementsByTagName('script')[0],
+					s = d.createElement('script');
+			s.type = 'text/javascript'; s.async = true; s.src = u;
+			f.parentNode.insertBefore(s, f);
+		}, 1);
 	}
 	_kms('//i.kissmetrics.com/i.js');
-	_kms('//doug1izaerwt3.cloudfront.net/' + _kmk + '.1.js');
+	_kms('//scripts.kissmetrics.com/' + _kmk + '.2.js');
 	</script>
 </head>
 <body ng-app="sample">
@@ -53,6 +53,13 @@
 	<button analytics-on analytics-category="Commands"  analytics-label="Button4 label" analytics-value="1" class="btn btn-info">Button 4</button>
 	<hr>
 
+	<button ng-click="analytics.setUsername('angulartics2', {handle:'angulartics2', company:'company2'})"
+					class="btn btn-primary">Identify</button>
+
+	<button ng-click="analytics.setUserProperties({x: 'y2'})"
+					class="btn btn-success">setUserProperties</button>
+	<hr>
+
 	<p class="alert alert-success">
 		Open the network inspector in your browser, click any of the nav options or buttons above and you'll see the analytics
 		request being executed. Then check <a class="alert-link" href="http://kissmetrics.com">your Segment dashboard</a>.
@@ -60,7 +67,7 @@
 </div>
 
 <script>
-	angular.module('sample', ['angulartics', 'angulartics.kissmetrics'])
+	angular.module('sample', ['ngRoute', 'angulartics', 'angulartics.kissmetrics'])
 	.config(function ($routeProvider, $analyticsProvider) {
 		$routeProvider
 			.when('/',  { template: '<h1>Root Page</h1>', controller: 'SampleCtrl' })
@@ -69,7 +76,9 @@
 			.when('/c', { template: '<h1>Page "C"</h1>',  controller: 'SampleCtrl' })
 			.otherwise({ redirectTo: '/' });
 	})
-	.controller('SampleCtrl', function () {});
+	.controller('SampleCtrl', function ($rootScope, $analytics) {
+		$rootScope.analytics = $analytics;
+	});
 </script>
 </body>
 </html>
